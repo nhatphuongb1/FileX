@@ -12,6 +12,10 @@ import io.flutter.plugin.common.MethodChannel
 import io.flutter.plugins.GeneratedPluginRegistrant
 import androidx.core.content.ContextCompat.*
 import java.io.File
+import android.graphics.BitmapFactory
+import android.media.ThumbnailUtils
+import android.graphics.Bitmap
+import java.io.ByteArrayOutputStream
 
 
 class MainActivity: FlutterActivity() {
@@ -26,6 +30,9 @@ class MainActivity: FlutterActivity() {
                         call.method == "getStorageTotalSpace" -> result.success(getStorageTotalSpace())
                         call.method == "getExternalStorageTotalSpace" -> result.success(getExternalStorageTotalSpace())
                         call.method == "getExternalStorageFreeSpace" -> result.success(getExternalStorageFreeSpace())
+                    }
+                    if(call.method == "compressImg"){
+                        result.success(call.argument<String>("path")?.let { getImageThumbnail(it) })
                     }
                 }
     }
@@ -58,5 +65,19 @@ class MainActivity: FlutterActivity() {
         val dirs: Array<File> = getExternalFilesDirs(context, null)
         val stat = StatFs(dirs[1].path.split("Android")[0])
         return stat.availableBytes
+    }
+
+    fun getImageThumbnail(imagePath: String): ByteArray{
+        val THUMBSIZE = 64
+
+        val thumbImage = ThumbnailUtils.extractThumbnail(
+                BitmapFactory.decodeFile(imagePath),
+                THUMBSIZE, THUMBSIZE)
+
+        val stream = ByteArrayOutputStream()
+        thumbImage.compress(Bitmap.CompressFormat.PNG, 100, stream)
+        val byteArray = stream.toByteArray()
+        thumbImage.recycle()
+        return byteArray
     }
 }

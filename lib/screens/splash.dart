@@ -39,9 +39,7 @@ class _SplashState extends State<Splash> {
               child: MainScreen(),
             ),
           );
-          Timer(Duration(seconds: 1), (){
-            Provider.of<CoreProvider>(context, listen: false).checkSpace();
-          });
+          Provider.of<CoreProvider>(context, listen: false).checkSpace();
         }
       });
     }else{

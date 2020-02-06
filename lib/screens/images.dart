@@ -88,7 +88,7 @@ class Images extends StatelessWidget {
                             index == 0
                                 ? provider.images
                                 : l.reversed.toList(),
-                                (index, item){
+                                (index, FileSystemEntity item){
                               File file = File(item.path);
                               String path = file.path;
                               String mimeType = mime(path);
@@ -104,7 +104,7 @@ class Images extends StatelessWidget {
                                             Colors.transparent
                                           ],
                                           begin: Alignment.topCenter,
-                                          end: Alignment.bottomCenter
+                                          end: Alignment.bottomCenter,
                                       ),
                                     ),
                                     child: Align(
@@ -143,6 +143,7 @@ class Images extends StatelessWidget {
                                       : Image.file(
                                     File(path),
                                     fit: BoxFit.cover,
+                                    height: 50,
                                   ),
                                 ),
                               );
